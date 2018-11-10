@@ -1,1 +1,1 @@
-web: gunicorn Sbuddy:app
+web: gunicorn app:app
