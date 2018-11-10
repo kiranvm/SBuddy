@@ -37,6 +37,13 @@ items = [
     }
 ]
 
+success = [
+    {
+        'message': u'Success'
+    }
+]
+
+
 
 @app.route('/sbuddy/api/v1.0/promotions',methods=['GET'])
 def get_promotions():
@@ -74,6 +81,7 @@ def add_item():
    
     session.add(newItem)
     session.commit()
+    return jsonify({'response': success[0]})
 
 if __name__ == '__main__':
 	app.run(debug=True)
