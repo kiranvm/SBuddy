@@ -63,6 +63,27 @@ def get_task(item_id):
         abort(404)
     return jsonify({'item': item[0]})
 
+@app.route('/sbuddy/api/v1.0/add_promotions',methods=['POST'])
+def add_promotion():
+   if request.method == 'POST':
+    prom_name = request.form.get('name')
+    prom_category = request.form.get('category')
+    prom_description = request.form.get('description')
+    prom_expirydate = request.form.get('expirydate')
+    prom_items = request.form.get('items')
+    prom_persona = request.form.get('persona')
+
+    newPromotion = Promotions(name=prom_name, 
+             description=prom_description,
+	     category = prom_category,
+             expirydate = prom_expirydate,
+             items = prom_items,
+	     persona = prom_persona)
+   
+    session.add(newPromotion)
+    session.commit()
+    return jsonify({'response': success[0]})
+
 @app.route('/sbuddy/api/v1.0/add_items',methods=['POST'])
 def add_item():
    if request.method == 'POST':
