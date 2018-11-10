@@ -9,14 +9,16 @@ items = [
         'title': u'Krogers Wheat Bread',
         'description': u'Krogers Wheat Bread',
 	'nutrition': u'testing nutrition',
-	'ingredients': u'testing ingredients'
+	'ingredients': u'testing ingredients',
+	'price': u'10'
     },
     {
         'id': 2,
         'title': u'Krogers Skimmed Milk',
         'description': u'Krogers Skimmed Milk',
 	'nutrition': u'testing nutrition',
-	'ingredients': u'testing ingredients'
+	'ingredients': u'testing ingredients',
+	'price': u'10'
     }
 ]
 
