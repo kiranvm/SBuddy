@@ -214,18 +214,18 @@ def get_recipeByName():
      print(type(recipe_items))
      print(str(recipe_items[0].item_id))
      results = {"name":recipe.name,"description":recipe.description}
-     items = []
+     #items = []
      for item in recipe_items:
        i =  session.query(Items).filter(Items.id==item.id).first()
        if i != None:
-         results["items"]=items.append({"name":i.name,"location":i.location})
+         results["items"]={"name":i.name,"location":i.location}
          #cnt=cnt+1
 	
     else:
      return jsonify({'response': noRecords[0]})
     if recipe == None:
         abort(404)
-    print (len(items))
+    #print (len(items))
     #return jsonify(recipe.serialize)
     return jsonify(results) 
 
@@ -250,6 +250,7 @@ def get_dashboard():
     promotions_count = session.query(Promotions).count()
     recipes_count = session.query(Recipe).count()
     users_count = session.query(Users).count()
+    personas_count = session.query(Personas).count()    
 
     persona_list = session.query(Users.persona).distinct()
 
@@ -263,6 +264,7 @@ def get_dashboard():
     results['item_count'] = items_count
     results['promotions_count'] = promotions_count
     results['recipes_count'] = recipes_count
+    results['personas_count'] = personas_count
     
     return jsonify(results)
     #return jsonify(Catalog=[i.serialize for i in list_recipes])
