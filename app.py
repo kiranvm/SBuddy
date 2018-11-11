@@ -32,6 +32,12 @@ success = [
     }
 ]
 
+noRecords = [
+     {
+	'message': u'No records present'
+     }
+]
+
 '''
 ######################
 Promotions API methods
@@ -193,6 +199,21 @@ def get_recipe(recipe_id):
     #return jsonify(result)
     #return jsonify(catalog=[str(i).serialize() for i in recipe_items])
     return jsonify(recipe_items[0].serialize) #to be checked later 
+
+@app.route('/sbuddy/api/v1.0/recipeByName', methods=['POST'])
+def get_recipeByName():
+    recipe_name=request.form.get('name')
+    #recipe = ""
+    if recipe_name != None:
+     recipe_name=recipe_name.lower()
+     #item = session.query(Items).filter(Items.id == item_id).first()
+     recipe = session.query(Recipe).filter(Recipe.name.contains(recipe_name)).first()
+     #item = [item for item in items if item['id'] == item_id]
+    else:
+     return jsonify({'response': noRecords[0]})
+    if recipe == None:
+        abort(404)
+    return jsonify(recipe.serialize) 
 
 '''
 ######################
