@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Base, Items, Promotions
+from models import Base, Items, Promotions, Users
 
 engine = create_engine('sqlite:///items_temp_data.db')
 Base.metadata.bind = engine
@@ -21,6 +21,11 @@ promotion1 = Promotions(name="Black Friday", category="All items",
 	     items = '10,11,12',
 	     persona = 'healthy,fastfood')
 
-session.add(item1)
-session.add(promotion1)
+user1 = Users(name="Kiran Vadakkath", email="kiranvadakath@gmail.com",
+             persona='health',
+	     items = '1,2,3',
+	     queries = 'oats,cereals')
+
+session.add(user1)
+#session.add(promotion1)
 session.commit()

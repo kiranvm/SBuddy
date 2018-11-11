@@ -180,6 +180,35 @@ def get_recipe(recipe_id):
     #return jsonify(catalog=[i.serialize() for i in recipe_items])
     return jsonify(recipe_items[0].serialize) #to be checked later 
 
+'''
+######################
+Dashboard API methods
+######################
+'''
+@app.route('/sbuddy/api/v1.0/dashboard',methods=['GET'])
+def get_dashboard():
+    items_count = session.query(Items).count()
+    promotions_count = session.query(Promotions).count()
+    recipes_count = session.query(Recipe).count()
+    users_count = session.query(Users).count()
+
+    persona_list = session.query(Users.persona).distinct()
+
+    results = {}
+
+    for personas in persona_list:
+      print (type(personas))
+      #print (session.query(Users).filter_by(persona=personas).count())
+      results[str(personas)] = session.query(Users).filter_by(persona=str(personas)).count()
+
+    results['item_count'] = items_count
+    results['promotions_count'] = promotions_count
+    results['recipes_count'] = recipes_count
+    
+    return jsonify(results)
+    #return jsonify(Catalog=[i.serialize for i in list_recipes])
+    #return jsonify({'response': success[0]})
+
 if __name__ == '__main__':
 	app.run(debug=True)
 	
