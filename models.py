@@ -107,6 +107,23 @@ class Recipe_Items(Base):
      self.recipe_id = recipe_id
      self.item_id = item_id
 
+#Personas
+class Personas(Base):
+   __tablename__ = 'personas'
+   id = Column('persona_id', Integer, primary_key = True)
+   name = Column(String(100))
+   description = Column(String(200))
+   tags = Column(String(500))
+
+   @property
+   def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+	    'description' : self.description,
+            'tags' : self.tags
+	}
+
 
 engine = create_engine('sqlite:///items_temp_data.db')
 

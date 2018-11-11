@@ -26,6 +26,7 @@ user1 = Users(name="Kiran Vadakkath", email="kiranvadakath@gmail.com",
 	     items = '1,2,3',
 	     queries = 'oats,cereals')
 
+session.add(item1)
 session.add(user1)
-#session.add(promotion1)
+session.add(promotion1)
 session.commit()

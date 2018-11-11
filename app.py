@@ -8,7 +8,15 @@ from flask import (
 #DB Imports
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Base, Items, Promotions, Recipe, Users, Recipe_Items
+from models import (
+		Base, 
+		Items, 
+		Promotions, 
+		Recipe, 
+		Users, 
+		Recipe_Items,
+                Personas
+		)
 
 #db access part
 engine = create_engine('sqlite:///items_temp_data.db')
@@ -177,7 +185,13 @@ def get_recipe(recipe_id):
      print (e.recipe_id)
     if recipe_items == None:
         abort(404)
-    #return jsonify(catalog=[i.serialize() for i in recipe_items])
+    result={}
+    '''for i in recipe_items:
+      item = session.query(Items).filter(Items.id == i).first()
+      result[item.id] = item
+    '''
+    #return jsonify(result)
+    #return jsonify(catalog=[str(i).serialize() for i in recipe_items])
     return jsonify(recipe_items[0].serialize) #to be checked later 
 
 '''
@@ -199,7 +213,7 @@ def get_dashboard():
     for personas in persona_list:
       print (type(personas))
       #print (session.query(Users).filter_by(persona=personas).count())
-      results[str(personas)] = session.query(Users).filter_by(persona=str(personas)).count()
+      results["personas"] = {str(personas):session.query(Users).filter_by(persona=str(personas)).count()}
 
     results['item_count'] = items_count
     results['promotions_count'] = promotions_count
@@ -208,6 +222,42 @@ def get_dashboard():
     return jsonify(results)
     #return jsonify(Catalog=[i.serialize for i in list_recipes])
     #return jsonify({'response': success[0]})
+
+'''
+######################
+Personas API methods
+######################
+'''
+@app.route('/sbuddy/api/v1.0/list_personas',methods=['GET'])
+def get_personas():
+    list_personas = session.query(Personas).all()
+    return jsonify(Personas=[i.serialize for i in list_personas])
+    return jsonify({'response': success[0]})
+
+@app.route('/sbuddy/api/v1.0/add_persona',methods=['POST'])
+def add_persona():
+   if request.method == 'POST':
+    persona_name = request.form.get('name')
+    persona_description = request.form.get('description')
+    persona_tags = request.form.get('tags')
+
+    newPersona = Personas(name=persona_name,
+             description=persona_description,
+	     tags=persona_tags)
+    session.add(newPersona)
+    session.commit()
+
+    return jsonify({'response': success[0]})
+
+@app.route('/sbuddy/api/v1.0/delete_persona', methods=['POST'])
+def delete_persona():
+    if request.method == 'POST':
+      persona = session.query(Personas).filter(Personas.id == request.form.get('id')).first()
+      if persona == None:
+        abort(404)
+      session.delete(persona)
+      session.commit()
+    return jsonify({'response': success[0]}) 
 
 if __name__ == '__main__':
 	app.run(debug=True)
