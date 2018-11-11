@@ -75,6 +75,39 @@ class Users(Base):
 	    'items' : self.items
 	}
 
+#recipe
+class Recipe(Base):
+   __tablename__ = 'recipes'
+   id = Column('recipe_id', Integer, primary_key = True)
+   name = Column(String(100))
+   description = Column(String(200))
+
+   @property
+   def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+	    'description' : self.description
+	}
+
+class Recipe_Items(Base):
+   __tablename__ = 'recipe_items'
+   id = Column('recipeItems_id', Integer, primary_key = True)
+   recipe_id = Column(String(100))
+   item_id = Column(String(100))
+
+   @property
+   def serialize(self):
+        return {
+            'id': self.id,
+            'recipe_id': self.recipe_id,
+	    'item_id' : self.item_id
+	}
+   def __init__(self, recipe_id, item_id):
+     self.recipe_id = recipe_id
+     self.item_id = item_id
+
+
 engine = create_engine('sqlite:///items_temp_data.db')
 
 Base.metadata.create_all(engine)

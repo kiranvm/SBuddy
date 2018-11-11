@@ -19,9 +19,8 @@ promotion1 = Promotions(name="Black Friday", category="All items",
              description='steep 10 % off',
              expirydate = '12/01/2018',
 	     items = '10,11,12',
-	     persona = 'healthy,fastfood'
-)
+	     persona = 'healthy,fastfood')
 
-#session.add(item1)
+session.add(item1)
 session.add(promotion1)
 session.commit()
