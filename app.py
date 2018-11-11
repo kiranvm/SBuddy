@@ -187,18 +187,18 @@ def get_recipes():
 def get_recipe(recipe_id):
     recipe_items = session.query(Recipe_Items).filter(Recipe_Items.recipe_id == recipe_id).all()
     print(type(recipe_items))
-    for e in recipe_items:
-     print (e.recipe_id)
+
     if recipe_items == None:
         abort(404)
-    result={}
-    '''for i in recipe_items:
-      item = session.query(Items).filter(Items.id == i).first()
-      result[item.id] = item
-    '''
-    #return jsonify(result)
-    #return jsonify(catalog=[str(i).serialize() for i in recipe_items])
-    return jsonify(recipe_items[0].serialize) #to be checked later 
+    results = {}
+    for e in recipe_items:
+     i =  session.query(Items).filter(Items.id==e.id).first()
+
+     if i != None:
+         results["items"]={i.name:i.location}
+
+    return jsonify(results)
+    #return jsonify(recipe_items[0].serialize) #to be checked later 
 
 @app.route('/sbuddy/api/v1.0/recipeByName', methods=['POST'])
 def get_recipeByName():
@@ -209,11 +209,21 @@ def get_recipeByName():
      #item = session.query(Items).filter(Items.id == item_id).first()
      recipe = session.query(Recipe).filter(Recipe.name.contains(recipe_name)).first()
      #item = [item for item in items if item['id'] == item_id]
+     recipe_items = session.query(Recipe_Items).filter(Recipe_Items.recipe_id==recipe.id).all()
+     print(type(recipe_items))
+     print(str(recipe_items[0].item_id))
+     results = {"name":recipe.name,"description":recipe.description}
+     for item in recipe_items:
+       i =  session.query(Items).filter(Items.id==item.id).first()
+       if i != None:
+         results["items"]={i.name:i.location}
+	
     else:
      return jsonify({'response': noRecords[0]})
     if recipe == None:
         abort(404)
-    return jsonify(recipe.serialize) 
+    #return jsonify(recipe.serialize)
+    return jsonify(results) 
 
 '''
 ######################
