@@ -239,7 +239,8 @@ def get_recipeByName():
        #print(i.count)
        if i != None:
          print (i.name)
-         results["items"]=results["items"].append({"name":i.name,"location":i.location})
+         #results["items"]=results["items"].append({"name":i.name,"location":i.location})
+         results["items"]={"name":i.name,"location":i.location}
          #cnt=cnt+1
 	
     else:
