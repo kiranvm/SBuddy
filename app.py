@@ -169,7 +169,7 @@ def add_recipe():
 
     recipe = session.query(Recipe).filter_by(name=recipe_name).first()
     
-    for item_id in recipe_items: 
+    for item_id in recipe_items.split(','): 
         print (recipe.id)
         print (item_id)  
         newItems = Recipe_Items(recipe.id,item_id)
@@ -185,6 +185,26 @@ def get_recipes():
     return jsonify(Catalog=[i.serialize for i in list_recipes])
     return jsonify({'response': success[0]})
 
+
+@app.route('/sbuddy/api/v1.0/bot_recipe/<int:recipe_id>',methods=['GET'])
+def get_bot_recipe(recipe_id):
+    recipe_items = session.query(Recipe_Items).filter(Recipe_Items.recipe_id == recipe_id).all()
+    print(type(recipe_items))
+
+    if recipe_items == None:
+        abort(404)
+    results = {}
+    ls = []
+    for e in recipe_items:
+      i =  session.query(Items).filter(Items.id==e.item_id).first()
+      if i != None:
+         #results["items"]=ls.append({i.name:i.location})
+         results["items"]={i.name:i.location}
+	 
+    return jsonify(results)
+
+
+
 @app.route('/sbuddy/api/v1.0/list_recipe/<int:recipe_id>',methods=['GET'])
 def get_recipe(recipe_id):
     recipe_items = session.query(Recipe_Items).filter(Recipe_Items.recipe_id == recipe_id).all()
@@ -194,9 +214,8 @@ def get_recipe(recipe_id):
         abort(404)
     results = {}
     for e in recipe_items:
-     i =  session.query(Items).filter(Items.id==e.id).first()
-
-     if i != None:
+      i =  session.query(Items).filter(Items.id==e.id).first()
+      if i != None:
          results["items"]={i.name:i.location}
 
     return jsonify(results)
@@ -296,7 +315,6 @@ def add_persona():
 	     tags=persona_tags)
     session.add(newPersona)
     session.commit()
-
     return jsonify({'response': success[0]})
 
 @app.route('/sbuddy/api/v1.0/delete_persona', methods=['POST'])
@@ -308,6 +326,26 @@ def delete_persona():
       session.delete(persona)
       session.commit()
     return jsonify({'response': success[0]}) 
+
+'''
+######################
+USERS API methods
+######################
+
+def add_user():
+   if request.method == 'POST':
+    user_name = request.form.get('name')
+    user_email = request.form.get('email')
+    user_persona = request.form.get('persona')
+    user_queries = request.form.get('queries')
+
+    newPersona = Personas(name=persona_name,
+             description=persona_description,
+	     tags=persona_tags)
+    session.add(newPersona)
+    session.commit()
+    return jsonify({'response': success[0]})
+'''
 
 if __name__ == '__main__':
 	app.run(debug=True)
