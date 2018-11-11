@@ -17,7 +17,7 @@ from models import (
 		Recipe_Items,
                 Personas
 		)
-import json
+#import json
 
 #db access part
 engine = create_engine('sqlite:///items_temp_data.db')
@@ -218,7 +218,7 @@ def get_recipeByName():
        print (item.id)
        i =  session.query(Items).filter(Items.id==item.id).first()
        #print(i.count)
-       if i != "":
+       if i != None:
          print (i.name)
          results["items"]=results["items"].append({"name":i.name,"location":i.location})
          #cnt=cnt+1
@@ -229,8 +229,8 @@ def get_recipeByName():
         abort(404)
     #print (len(items))
     #return jsonify(recipe.serialize)
-    #return jsonify(results) 
-    return json.dumps(results)
+    return jsonify(results) 
+    #return json.dumps(results)
 
 @app.route('/sbuddy/api/v1.0/delete_recipe', methods=['POST'])
 def delete_recipe():
