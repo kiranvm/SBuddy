@@ -213,17 +213,30 @@ def get_recipeByName():
      print(type(recipe_items))
      print(str(recipe_items[0].item_id))
      results = {"name":recipe.name,"description":recipe.description}
+     items = []
      for item in recipe_items:
        i =  session.query(Items).filter(Items.id==item.id).first()
        if i != None:
-         results["items"]={i.name:i.location}
+         results["items"]=items.append({"name":i.name,"location":i.location})
+         #cnt=cnt+1
 	
     else:
      return jsonify({'response': noRecords[0]})
     if recipe == None:
         abort(404)
+    print (len(items))
     #return jsonify(recipe.serialize)
     return jsonify(results) 
+
+@app.route('/sbuddy/api/v1.0/delete_recipe', methods=['POST'])
+def delete_recipe():
+    if request.method == 'POST':
+      recipe = session.query(Recipe).filter(Recipe.id == request.form.get('id')).first()
+      if item == None:
+        abort(404)
+      session.delete(recipe)
+      session.commit()
+    return jsonify({'response': success[0]}) 
 
 '''
 ######################
