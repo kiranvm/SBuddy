@@ -26,7 +26,7 @@ class Items(Base):
 	    'category' : self.category,
 	    'description': self.description,
             'nutrition': self.nutrition,
-	    'ingredients' : self.category,        
+	    'ingredients' : self.ingredients,        
 	    'price' : self.price,
             'location' : self.location
 	}
