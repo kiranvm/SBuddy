@@ -180,6 +180,7 @@ def add_recipe():
 @app.route('/sbuddy/api/v1.0/list_recipes',methods=['GET'])
 def get_recipes():
     list_recipes = session.query(Recipe).all()
+
     return jsonify(Catalog=[i.serialize for i in list_recipes])
     return jsonify({'response': success[0]})
 
@@ -232,7 +233,7 @@ def get_recipeByName():
 def delete_recipe():
     if request.method == 'POST':
       recipe = session.query(Recipe).filter(Recipe.id == request.form.get('id')).first()
-      if item == None:
+      if recipe == None:
         abort(404)
       session.delete(recipe)
       session.commit()
