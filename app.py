@@ -69,6 +69,14 @@ def get_item(item_id):
     #return item.toJSON()
     #return jsonify({'item': item})
 
+@app.route('/sbuddy/api/v1.0/promotions/<int:promotion_id>', methods=['GET'])
+def get_promotion(promotion_id):
+    promotion = session.query(Promotions).filter(Promotions.id == promotion_id).first()
+    #item = [item for item in items if item['id'] == item_id]
+    if promotion == None:
+        abort(404)
+    return jsonify(promotion.serialize) 
+
 @app.route('/sbuddy/api/v1.0/add_promotions',methods=['POST'])
 def add_promotion():
    if request.method == 'POST':
