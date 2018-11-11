@@ -63,11 +63,16 @@ def get_item(item_id):
     if item == None:
         abort(404)
     return jsonify(item.serialize) 
-    #print (item)
-    #for key, val in events.items():
-    #  print('{0}:\t{1}'.format(key,val))
-    #return item.toJSON()
-    #return jsonify({'item': item})
+
+@app.route('/sbuddy/api/v1.0/delete_item', methods=['POST'])
+def delete_item():
+    if request.method == 'POST':
+      item = session.query(Items).filter(Items.id == request.form.get('id')).first()
+      if item == None:
+        abort(404)
+      session.delete(item)
+      session.commit()
+    return jsonify({'response': success[0]}) 
 
 @app.route('/sbuddy/api/v1.0/promotions/<int:promotion_id>', methods=['GET'])
 def get_promotion(promotion_id):
@@ -97,6 +102,16 @@ def add_promotion():
     session.add(newPromotion)
     session.commit()
     return jsonify({'response': success[0]})
+
+@app.route('/sbuddy/api/v1.0/delete_promotion', methods=['POST'])
+def delete_promotion():
+    if request.method == 'POST':
+      promotion = session.query(Promotions).filter(Promotions.id == request.form.get('id')).first()
+      if promotion == None:
+        abort(404)
+      session.delete(promotion)
+      session.commit()
+    return jsonify({'response': success[0]}) 
 
 @app.route('/sbuddy/api/v1.0/add_items',methods=['POST'])
 def add_item():
