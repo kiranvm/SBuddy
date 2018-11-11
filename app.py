@@ -57,11 +57,17 @@ def get_items():
     return jsonify(Catalog=[i.serialize for i in list_items])
 
 @app.route('/sbuddy/api/v1.0/items/<int:item_id>', methods=['GET'])
-def get_task(item_id):
-    item = [item for item in items if item['id'] == item_id]
-    if len(item) == 0:
+def get_item(item_id):
+    item = session.query(Items).filter(Items.id == item_id).first()
+    #item = [item for item in items if item['id'] == item_id]
+    if item == None:
         abort(404)
-    return jsonify({'item': item[0]})
+    return jsonify(item.serialize) 
+    #print (item)
+    #for key, val in events.items():
+    #  print('{0}:\t{1}'.format(key,val))
+    #return item.toJSON()
+    #return jsonify({'item': item})
 
 @app.route('/sbuddy/api/v1.0/add_promotions',methods=['POST'])
 def add_promotion():
