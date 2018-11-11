@@ -16,6 +16,7 @@ class Items(Base):
    nutrition = Column(String(200))
    ingredients = Column(String(200))
    price = Column(Integer)
+   location = Column(String(50))
 
    @property
    def serialize(self):
@@ -26,7 +27,8 @@ class Items(Base):
 	    'description': self.description,
             'nutrition': self.nutrition,
 	    'ingredients' : self.category,        
-	    'price' : self.price
+	    'price' : self.price,
+            'location' : self.location
 	}
 
 #promotions
@@ -52,6 +54,26 @@ class Promotions(Base):
 	    'persona' : self.persona
 	}
 
+#users
+class Users(Base):
+   __tablename__ = 'users'
+   id = Column('user_id', Integer, primary_key = True)
+   name = Column(String(100))
+   email = Column(String(100))
+   persona = Column(String(100))
+   queries = Column(String(200))
+   items = Column(String(200))
+
+   @property
+   def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+	    'email' : self.email,
+	    'persona': self.persona,
+            'queries': self.queries,
+	    'items' : self.items
+	}
 
 engine = create_engine('sqlite:///items_temp_data.db')
 

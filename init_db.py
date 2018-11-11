@@ -8,12 +8,13 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 # Some inital data for our database
-'''item1 = Items(name="Peanut Butter", category="breakfast",
+item1 = Items(name="Peanut Butter", category="breakfast",
              description='Peanut Butter',
 	     nutrition = 'Protein:10,fat:10,sugar:5',
              ingredients = 'peanuts,milk,sugar',
-             price = 10)
-'''
+             price = 10,
+             location = 'A10,5')
+
 promotion1 = Promotions(name="Black Friday", category="All items",
              description='steep 10 % off',
              expirydate = '12/01/2018',

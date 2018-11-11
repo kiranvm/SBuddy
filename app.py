@@ -18,32 +18,11 @@ session = DBSession()
 
 app = Flask(__name__)
 
-items = [
-    {
-        'id': 1,
-        'title': u'Krogers Wheat Bread',
-        'description': u'Krogers Wheat Bread',
-	'nutrition': u'testing nutrition',
-	'ingredients': u'testing ingredients',
-	'price': u'10'
-    },
-    {
-        'id': 2,
-        'title': u'Krogers Skimmed Milk',
-        'description': u'Krogers Skimmed Milk',
-	'nutrition': u'testing nutrition',
-	'ingredients': u'testing ingredients',
-	'price': u'10'
-    }
-]
-
 success = [
     {
         'message': u'Success'
     }
 ]
-
-
 
 @app.route('/sbuddy/api/v1.0/promotions',methods=['GET'])
 def get_promotions():
@@ -52,7 +31,6 @@ def get_promotions():
 
 @app.route('/sbuddy/api/v1.0/items',methods=['GET'])
 def get_items():
-    #return jsonify({'items': items})
     list_items = session.query(Items).all()
     return jsonify(Catalog=[i.serialize for i in list_items])
 
@@ -77,7 +55,6 @@ def delete_item():
 @app.route('/sbuddy/api/v1.0/promotions/<int:promotion_id>', methods=['GET'])
 def get_promotion(promotion_id):
     promotion = session.query(Promotions).filter(Promotions.id == promotion_id).first()
-    #item = [item for item in items if item['id'] == item_id]
     if promotion == None:
         abort(404)
     return jsonify(promotion.serialize) 
@@ -122,12 +99,14 @@ def add_item():
     item_nutrition = request.form.get('nutrition')
     item_ingredients = request.form.get('ingredients')
     item_price = request.form.get('price')
+    item_location = request.form.get('location')
 
     newItem = Items(name=item_name, category=item_category,
              description=item_description,
 	     nutrition = item_nutrition,
              ingredients = item_ingredients,
-             price = item_price)
+             price = item_price,
+             location = item_location)
    
     session.add(newItem)
     session.commit()
