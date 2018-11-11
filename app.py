@@ -17,6 +17,7 @@ from models import (
 		Recipe_Items,
                 Personas
 		)
+import json
 
 #db access part
 engine = create_engine('sqlite:///items_temp_data.db')
@@ -207,18 +208,19 @@ def get_recipeByName():
     #recipe = ""
     if recipe_name != None:
      recipe_name=recipe_name.lower()
-     #item = session.query(Items).filter(Items.id == item_id).first()
      recipe = session.query(Recipe).filter(Recipe.name.contains(recipe_name)).first()
-     #item = [item for item in items if item['id'] == item_id]
+     
      recipe_items = session.query(Recipe_Items).filter(Recipe_Items.recipe_id==recipe.id).all()
-     print(type(recipe_items))
-     print(str(recipe_items[0].item_id))
-     results = {"name":recipe.name,"description":recipe.description}
+
+     results = {"name":recipe.name,"description":recipe.description,"items":[]}
      #items = []
      for item in recipe_items:
+       print (item.id)
        i =  session.query(Items).filter(Items.id==item.id).first()
-       if i != None:
-         results["items"]={"name":i.name,"location":i.location}
+       #print(i.count)
+       if i != "":
+         print (i.name)
+         results["items"]=results["items"].append({"name":i.name,"location":i.location})
          #cnt=cnt+1
 	
     else:
@@ -227,7 +229,8 @@ def get_recipeByName():
         abort(404)
     #print (len(items))
     #return jsonify(recipe.serialize)
-    return jsonify(results) 
+    #return jsonify(results) 
+    return json.dumps(results)
 
 @app.route('/sbuddy/api/v1.0/delete_recipe', methods=['POST'])
 def delete_recipe():
